@@ -10,7 +10,7 @@ export default function Footer() {
       <Container maxWidth="md">
         <Box sx={{ textAlign: 'center' }}>
           <Typography variant="caption">
-              ©2023 hyota maki
+              ©2024 hyota maki
           </Typography>
         </Box>
       </Container>

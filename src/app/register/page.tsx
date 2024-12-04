@@ -1,6 +1,6 @@
 'use client'
 
-import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, TextField } from "@mui/material";
+import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, TextField } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import React from "react";
@@ -23,11 +23,12 @@ export default function registerUserPage()
   return (
     <div style={{ display: 'flex', justifyContent: 'center'}}>
       <Stack
-      component="form"
-      sx={{ width: '25ch', mt: 13, justifyContent: 'center'}}
-      spacing={2}
-      noValidate
-      autoComplete="off"
+        component="form"
+        sx={{ width: '25ch', mt: 13, justifyContent: 'center'}}
+        spacing={2}
+        noValidate
+        autoComplete="off"
+        alignItems="center"
       >
         <TextField
           id="email"
@@ -80,6 +81,12 @@ export default function registerUserPage()
               label="Password"
             />
         </FormControl>
+        <Button 
+          variant="contained"
+          sx={{ m: 1, width: '25ch' }}
+        >
+          登録
+        </Button>
       </Stack>
     </div>
   )

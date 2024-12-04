@@ -3,30 +3,15 @@ import { UserPassword } from "./UserPassword";
 
 export class UserRegisterData
 {
-    private email: UserEmail;
-    private password: UserPassword;
-    private passwordConfirmation: UserPassword;
+    readonly email: UserEmail;
+    readonly password: UserPassword;
+    readonly passwordConfirmation: UserPassword;
 
     constructor(email: UserEmail, password: UserPassword, passwordConfirmation: UserPassword)
     {
         this.email = email;
         this.password = password;
         this.passwordConfirmation = passwordConfirmation;
-    }
-
-    public getEmail(): UserEmail
-    {
-        return this.email;
-    }
-
-    public getPassword(): UserPassword
-    {
-        return this.password;
-    }
-
-    public getPasswordConfirmation(): UserPassword
-    {
-        return this.passwordConfirmation;
     }
 
     public isValid(): boolean

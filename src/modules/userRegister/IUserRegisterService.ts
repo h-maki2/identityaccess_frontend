@@ -1,6 +1,7 @@
 import { UserRegisterData } from "./UserRegisterData";
+import { UserRegisterResult } from "./UserRegisterResult";
 
 export interface IUserRegisterService
 {
-    register(userRegisterData: UserRegisterData): void;
+    register(userRegisterData: UserRegisterData): UserRegisterResult;
 }

@@ -11,4 +11,8 @@ abstract class IdentityAccessApi
         this.httpMethod = httpMethod;
         this.requestUrl = `${this.BASE_URL}${requestUrlPath}`;
     }
+
+    public abstract sendRequest<T>(requestData: T): Response;
+
+    protected abstract requestOptions(): RequestInit;
 }

@@ -1,17 +1,10 @@
-type ResponseData = {
-    [key: string]: any;
-}
-
-export class IdentityAccessApiResult
+export abstract class IdentityAccessApiResult
 {
-    readonly status: string;
-    readonly message: string;
-    readonly data: ResponseData | null;
+    readonly isSuccess: boolean;
+    abstract readonly data: any;
 
-    constructor(status: string, message: string, data: ResponseData | null)
+    constructor(status: string)
     {
-        this.status = status;
-        this.message = message;
-        this.data = data;
+        this.isSuccess = status === 'success';
     }
 }

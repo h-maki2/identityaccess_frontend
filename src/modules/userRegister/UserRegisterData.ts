@@ -1,6 +1,12 @@
 import { UserEmail } from "./UserEmail";
 import { UserPassword } from "./UserPassword";
 
+type UserRegisterRequestData = {
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+}
+
 export class UserRegisterData
 {
     readonly email: UserEmail;
@@ -27,5 +33,14 @@ export class UserRegisterData
         }
 
         return true;
+    }
+
+    public toRequestData(): UserRegisterRequestData
+    {
+        return {
+            email: this.email.value,
+            password: this.password.value,
+            passwordConfirmation: this.passwordConfirmation.value
+        };
     }
 }

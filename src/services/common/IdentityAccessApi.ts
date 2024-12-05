@@ -1,18 +1,32 @@
 import { HttpMethod } from "./HttpMethod";
+import { IdentityAccessApiResult } from "./IdentityAccessApiResult";
 
-abstract class IdentityAccessApi
+class IdentityAccessPostApi
 {
-    protected httpMethod: HttpMethod;
     protected requestUrl: string;
     protected readonly BASE_URL = 'https://identityaccessapi.com/';
 
-    constructor(requestUrlPath: string, httpMethod: HttpMethod)
+    constructor(requestUrlPath: string)
     {
-        this.httpMethod = httpMethod;
         this.requestUrl = `${this.BASE_URL}${requestUrlPath}`;
     }
 
-    public abstract sendRequest<T>(requestData: T): Response;
+    public async sendRequest<T>(requestData: T): Promise<IdentityAccessApiResult>
+    {
+        const response = await fetch(this.requestUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        });
 
-    protected abstract requestOptions(): RequestInit;
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responsejson = await response.json();
+
+        return new IdentityAccessApiResult(responsejson.status, responsejson.message, responsejson.data);
+    }
 }

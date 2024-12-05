@@ -1,7 +1,6 @@
-import { HttpMethod } from "./HttpMethod";
 import { IdentityAccessApiResult } from "./IdentityAccessApiResult";
 
-class IdentityAccessPostApi
+export class IdentityAccessPostRequest
 {
     protected requestUrl: string;
     protected readonly BASE_URL = 'https://identityaccessapi.com/';
@@ -11,7 +10,7 @@ class IdentityAccessPostApi
         this.requestUrl = `${this.BASE_URL}${requestUrlPath}`;
     }
 
-    public async sendRequest<T>(requestData: T): Promise<IdentityAccessApiResult>
+    public async send<T>(requestData: T): Promise<IdentityAccessApiResult>
     {
         const response = await fetch(this.requestUrl, {
             method: "POST",

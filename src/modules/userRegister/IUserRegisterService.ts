@@ -3,5 +3,5 @@ import { UserRegisterResult } from "./UserRegisterResult";
 
 export interface IUserRegisterService
 {
-    register(userRegisterData: UserRegisterData): UserRegisterResult;
+    register(userRegisterData: UserRegisterData): Promise<UserRegisterResult>;
 }

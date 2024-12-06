@@ -1,9 +1,9 @@
 import { IUserRegisterService } from "@/modules/userRegister/IUserRegisterService";
 import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
 import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
+import { UserRegisterApiResponse, UserRegisterApiResponseValue } from "./UserRegisterApiResponse";
+import { ValidationErrorMessageData } from "@/modules/common/ValidationErrorMessageData";
 import { IdentityAccessPostRequest } from "../common/identityAccess/IdentityAccessPostRequest";
-import { IdentityAccessApiResponse } from "../common/identityAccess/IdentityAccessApiResponse";
-import { UserRegisterApiResponse } from "./UserRegisterApiResponse";
 
 export class UserRegisterService implements IUserRegisterService
 {
@@ -14,16 +14,14 @@ export class UserRegisterService implements IUserRegisterService
         this.requestUrlPath = 'userRegistration';
     }
 
-    public async register(userRegisterData: UserRegisterData): UserRegisterResult
+    public async register(userRegisterData: UserRegisterData): Promise<UserRegisterResult>
     {
-        const userRegisterResult = this.identityAccessPostRequest().send(
+        const apiResponse = await this.identityAccessPostRequest().send(
             userRegisterData.toRequestData(),
             UserRegisterApiResponse
         );
 
-        userRegisterResult.then((result: UserRegisterApiResponse) => {
-            return new UserRegisterResult(result.isSuccess, result.data);
-        });
+        return new UserRegisterResult(apiResponse.isSuccess, this.toValidationErrorMessageDataList(apiResponse.data));
     }
 
     private identityAccessPostRequest(): IdentityAccessPostRequest
@@ -31,8 +29,14 @@ export class UserRegisterService implements IUserRegisterService
         return new IdentityAccessPostRequest(this.requestUrlPath);
     }
 
-    private toValidationErrorMessageDataList(result: UserRegisterApiResponse): ValidationErrorMessageData[]
+    private toValidationErrorMessageDataList(reponseData: UserRegisterApiResponseValue): ValidationErrorMessageData[]
     {
+        let result: ValidationErrorMessageData[] = [];
 
+        Object.entries(reponseData.validationErrorMessageList).forEach(([errorField, errorMessageList]: [string, string[]]) => {
+            result.push(new ValidationErrorMessageData(errorField, errorMessageList));
+        });
+
+        return result;
     }
 }

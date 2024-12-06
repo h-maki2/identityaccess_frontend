@@ -2,7 +2,7 @@ import { ValidationErrorMessageData } from "@/modules/common/ValidationErrorMess
 import { IdentityAccessApiResponse } from "../common/identityAccess/IdentityAccessApiResponse";
 
 export type UserRegisterApiResponseValue = {
-    'validationErrorMessageList' : ValidationErrorMessageData[]
+    validationErrorMessageList : { [key: string]: string[] }
 };
 
 export class UserRegisterApiResponse extends IdentityAccessApiResponse<UserRegisterApiResponseValue>

@@ -1,7 +1,7 @@
 import { IdentityAccessApiResult } from "./IdentityAccessApiResult";
 
-interface Constructor<U> {
-    new (status: string, data: any): U;
+interface Constructor<TReturnValue, TJsonValue> {
+    new (status: string, data: TJsonValue): TReturnValue;
 }
 
 export class IdentityAccessPostRequest
@@ -14,7 +14,14 @@ export class IdentityAccessPostRequest
         this.requestUrl = `${this.BASE_URL}${requestUrlPath}`;
     }
 
-    public async send<T, U extends IdentityAccessApiResult>(requestData: T, createClass: Constructor<U>): Promise<U>
+    public async send<
+        TRequestData, 
+        TJsonValue, 
+        TResponseData extends IdentityAccessApiResult<TJsonValue>
+    >(
+        requestData: TRequestData, 
+        createClass: Constructor<TResponseData, TJsonValue>
+    ): Promise<TResponseData>
     {
         const response = await fetch(this.requestUrl, {
             method: "POST",

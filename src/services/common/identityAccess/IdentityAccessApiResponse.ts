@@ -1,4 +1,4 @@
-export abstract class IdentityAccessApiResult<TJsonValue>
+export abstract class IdentityAccessApiResponse<TJsonValue>
 {
     readonly isSuccess: boolean;
     abstract readonly data: TJsonValue | null;

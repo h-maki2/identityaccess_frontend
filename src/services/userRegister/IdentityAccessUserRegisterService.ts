@@ -2,9 +2,10 @@ import { IUserRegisterService } from "@/modules/userRegister/IUserRegisterServic
 import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
 import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
 import { IdentityAccessPostRequest } from "../common/identityAccess/IdentityAccessPostRequest";
-import { IdentityAccessApiResult } from "../common/identityAccess/IdentityAccessApiResult";
+import { IdentityAccessApiResponse } from "../common/identityAccess/IdentityAccessApiResponse";
+import { UserRegisterApiResponse } from "./UserRegisterApiResponse";
 
-export class IdentityAccessUserRegisterService implements IUserRegisterService
+export class UserRegisterService implements IUserRegisterService
 {
     private requestUrlPath: string;
 
@@ -15,9 +16,13 @@ export class IdentityAccessUserRegisterService implements IUserRegisterService
 
     public async register(userRegisterData: UserRegisterData): UserRegisterResult
     {
-        const identityAccessApiResult = this.identityAccessPostRequest().send(userRegisterData.toRequestData());
-        identityAccessApiResult.then((result: IdentityAccessApiResult) => {
-            return new UserRegisterResult(result.isSuccess)
+        const userRegisterResult = this.identityAccessPostRequest().send(
+            userRegisterData.toRequestData(),
+            UserRegisterApiResponse
+        );
+
+        userRegisterResult.then((result: UserRegisterApiResponse) => {
+            return new UserRegisterResult(result.isSuccess, result.data);
         });
     }
 
@@ -26,7 +31,7 @@ export class IdentityAccessUserRegisterService implements IUserRegisterService
         return new IdentityAccessPostRequest(this.requestUrlPath);
     }
 
-    private toValidationErrorMessageDataList(identityAccessApiResult: IdentityAccessApiResult): ValidationErrorMessageData[]
+    private toValidationErrorMessageDataList(result: UserRegisterApiResponse): ValidationErrorMessageData[]
     {
 
     }

@@ -1,7 +1,12 @@
-import { IdentityAccessApiResult } from "./IdentityAccessApiResult";
+import { IdentityAccessApiResponse } from "./IdentityAccessApiResponse";
 
 interface Constructor<TReturnValue, TJsonValue> {
     new (status: string, data: TJsonValue): TReturnValue;
+}
+
+type ApiResponse<T> = {
+    status: string;
+    data: T | null;
 }
 
 export class IdentityAccessPostRequest
@@ -17,7 +22,7 @@ export class IdentityAccessPostRequest
     public async send<
         TRequestData, 
         TJsonValue, 
-        TResponseData extends IdentityAccessApiResult<TJsonValue>
+        TResponseData extends IdentityAccessApiResponse<TJsonValue>
     >(
         requestData: TRequestData, 
         createClass: Constructor<TResponseData, TJsonValue>
@@ -35,7 +40,11 @@ export class IdentityAccessPostRequest
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const responsejson = await response.json();
+        const responsejson: ApiResponse<TJsonValue> = await response.json();
+
+        if (responsejson.data === null) {
+            throw new Error('Response data is null');
+        }
 
         return new createClass(responsejson.status, responsejson.data);
     }

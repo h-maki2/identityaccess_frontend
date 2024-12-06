@@ -1,14 +1,24 @@
 'use client'
 
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, TextField } from "@mui/material";
+import { Backdrop, Button, CircularProgress, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, TextField } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import React from "react";
+import React, { useState } from "react";
+import { UserEmail } from "@/modules/userRegister/UserEmail";
+import { UserPassword } from "@/modules/userRegister/UserPassword";
+import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
+import { useUserRegister } from "@/hooks/userRegister/UseUserRegister";
+import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
+import { UserRegisterService } from "@/services/userRegister/UserRegisterService";
 
 
 export default function registerUserPage()
 {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [email, setEmail] = useState<UserEmail>(new UserEmail(''));
+  const [password, setPassword] = useState<UserPassword>(new UserPassword(''));
+  const [passwordConfirmation, setPasswordConfirmation] = useState<UserPassword>(new UserPassword(''));
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -19,6 +29,15 @@ export default function registerUserPage()
   const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
+
+  const { userRegister, userRegisterResult, error, loading } = useUserRegister({
+    userRegisterService: new UserRegisterService(),
+    userRegisterData: new UserRegisterData(email, password, passwordConfirmation)
+  });
+
+  const handleRequest = () => {
+    userRegister();
+  }
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center'}}>
@@ -34,12 +53,14 @@ export default function registerUserPage()
           id="email"
           label="メールアドレス"
           sx={{ m: 1, width: '50ch' }}
+          onChange={(e) => setEmail(new UserEmail(e.target.value))}
         />
         <FormControl sx={{ m: 1, width: '50ch' }} variant="outlined">
           <InputLabel htmlFor="password">パスワード</InputLabel>
             <OutlinedInput
               id="password"
               type={showPassword ? 'text' : 'password'}
+              onChange={(e) => setPassword(new UserPassword(e.target.value))}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -63,6 +84,7 @@ export default function registerUserPage()
             <OutlinedInput
               id="passwordConfirmation"
               type={showPassword ? 'text' : 'password'}
+              onChange={(e) => setPasswordConfirmation(new UserPassword(e.target.value))}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -84,10 +106,17 @@ export default function registerUserPage()
         <Button 
           variant="contained"
           sx={{ m: 1, width: '25ch' }}
+          onClick={handleRequest}
         >
           登録
         </Button>
       </Stack>
+      <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading ? loading : false}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   )
 }

@@ -10,4 +10,15 @@ export class UserRegisterResult
         this.isSuccess = isSuccess;
         this.validationErrorMessageDataList = validationErrorMessageDataList;
     }
+
+    public getErrorMessageListFrom(fieldName: string): string[]
+    {
+        const validationErrorMessageData = this.validationErrorMessageDataList.find(data => data.fieldName === fieldName);
+
+        if (validationErrorMessageData === undefined) {
+            return [];
+        }
+
+        return validationErrorMessageData.errorMessageList;
+    }
 }

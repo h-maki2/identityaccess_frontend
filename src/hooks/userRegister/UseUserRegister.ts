@@ -6,32 +6,30 @@ import { useEffect, useState } from "react";
 interface UseUserRegisterProps {
     userRegisterService: IUserRegisterService;
     userRegisterData: UserRegisterData;
-    setLoadingFn: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 interface UseUserRegisterReturn {
+    userRegister: () => Promise<void>;
     userRegisterResult: UserRegisterResult | null;
     error: boolean;
+    loading: boolean;
 }
 
-export const useUserRegister = ({userRegisterService, userRegisterData, setLoadingFn}: UseUserRegisterProps): UseUserRegisterReturn => {
+export const useUserRegister = ({userRegisterService, userRegisterData}: UseUserRegisterProps): UseUserRegisterReturn => {
     const [userRegisterResult, setUserRegisterResult] = useState<UserRegisterResult | null>(null);
     const [error, setError] = useState<boolean>(false);
+    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const userRegister = async () => {
-          try {
+    const userRegister = async () => {
+        try {
             const result = await userRegisterService.register(userRegisterData);
             setUserRegisterResult(result);
-          } catch (err) {
+        } catch (err) {
             setError(true);
-          } finally {
-            setLoadingFn(false);
-          }
-        };
+        } finally {
+            setLoading(false);
+        }
+    };
     
-        userRegister();
-      }, []);
-    
-    return { userRegisterResult, error };
+    return { userRegister, userRegisterResult, error, loading };
 }

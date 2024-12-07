@@ -1,10 +1,11 @@
+import { FetchCerfToken } from "../csrfToken/FetchCerfToken";
 import { IdentityAccessApiResponse } from "./IdentityAccessApiResponse";
 import { IdentityAccessApiVersion } from "./IdentityAccessApiVersion";
 
 export class IdentityAccessPostRequest
 {
     protected requestUrl: string;
-    protected readonly BASE_URL = 'https://identityaccessapi.com/';
+    protected readonly BASE_URL = 'http://identityAccess.local/';
 
     constructor(requestUrlPath: string)
     {
@@ -20,12 +21,15 @@ export class IdentityAccessPostRequest
         identityAccessApiVersion: IdentityAccessApiVersion
     ): Promise<IdentityAccessApiResponse<TResponseData, TErrorDetails>>
     {
+        await this.fetchCerfToken().handle();
+
         const response = await fetch(this.requestUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": `application/vnd.example.${identityAccessApiVersion}+json`
             },
+            credentials: 'include',
             body: JSON.stringify(requestData)
         });
 
@@ -36,5 +40,10 @@ export class IdentityAccessPostRequest
         const responseJson: IdentityAccessApiResponse<TResponseData, TErrorDetails> = await response.json();
 
         return responseJson;
+    }
+
+    private fetchCerfToken(): FetchCerfToken
+    {
+        return new FetchCerfToken();
     }
 }

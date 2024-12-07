@@ -18,9 +18,10 @@ interface UseUserRegisterReturn {
 export const useUserRegister = ({userRegisterService, userRegisterData}: UseUserRegisterProps): UseUserRegisterReturn => {
     const [userRegisterResult, setUserRegisterResult] = useState<UserRegisterResult | null>(null);
     const [error, setError] = useState<boolean>(false);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const userRegister = async () => {
+        setLoading(true);
         if (!userRegisterData.isValid()) {
             setUserRegisterResult({
                 isSuccess: false,

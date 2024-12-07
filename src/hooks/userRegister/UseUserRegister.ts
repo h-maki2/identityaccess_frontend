@@ -21,6 +21,15 @@ export const useUserRegister = ({userRegisterService, userRegisterData}: UseUser
     const [loading, setLoading] = useState(true);
 
     const userRegister = async () => {
+        if (!userRegisterData.isValid()) {
+            setUserRegisterResult({
+                isSuccess: false,
+                validationErrorMessage: userRegisterData.getValidationErrorMessage()
+            })
+            setLoading(false);
+            return;
+        }
+
         try {
             const result = await userRegisterService.register(userRegisterData);
             setUserRegisterResult(result);

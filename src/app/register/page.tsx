@@ -5,8 +5,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import React, { useState } from "react";
 import { UserEmail } from "@/modules/userRegister/UserEmail";
-import { UserPassword } from "@/modules/userRegister/UserPassword";
-import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
+import { UserPassword, UserPasswordConfirmation } from "@/modules/userRegister/UserPassword";
 import { useUserRegister } from "@/hooks/userRegister/UseUserRegister";
 import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
 import { UserRegisterService } from "@/services/userRegister/UserRegisterService";
@@ -15,8 +14,8 @@ import { UserRegisterService } from "@/services/userRegister/UserRegisterService
 export default function registerUserPage()
 {
   const [email, setEmail] = useState<UserEmail>(new UserEmail(''));
-  const [password, setPassword] = useState<UserPassword>(new UserPassword(''));
-  const [passwordConfirmation, setPasswordConfirmation] = useState<UserPassword>(new UserPassword(''));
+  const [password, setPassword] = useState<UserPassword>({ value: '' });
+  const [passwordConfirmation, setPasswordConfirmation] = useState<UserPasswordConfirmation>(new UserPasswordConfirmation('', password));
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -55,12 +54,15 @@ export default function registerUserPage()
           sx={{ m: 1, width: '50ch' }}
           onChange={(e) => setEmail(new UserEmail(e.target.value))}
         />
+        {userRegisterResult && userRegisterResult.validationErrorMessage.email.map(
+          (errorMessage, index) => <FormHelperText key={index} error>{errorMessage}</FormHelperText>
+        )}
         <FormControl sx={{ m: 1, width: '50ch' }} variant="outlined">
           <InputLabel htmlFor="password">パスワード</InputLabel>
             <OutlinedInput
               id="password"
               type={showPassword ? 'text' : 'password'}
-              onChange={(e) => setPassword(new UserPassword(e.target.value))}
+              onChange={(e) => setPassword({ value: e.target.value })}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -84,7 +86,7 @@ export default function registerUserPage()
             <OutlinedInput
               id="passwordConfirmation"
               type={showPassword ? 'text' : 'password'}
-              onChange={(e) => setPasswordConfirmation(new UserPassword(e.target.value))}
+              onChange={(e) => setPasswordConfirmation(new UserPasswordConfirmation(e.target.value, password))}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

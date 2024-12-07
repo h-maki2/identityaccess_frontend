@@ -1,9 +1,9 @@
 import { IUserRegisterService } from "@/modules/userRegister/IUserRegisterService";
-import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
+import { UserRegisterData, UserRegisterRequestData } from "@/modules/userRegister/UserRegisterData";
 import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
-import { UserRegisterApiResponse, UserRegisterApiResponseValue } from "./UserRegisterApiResponse";
-import { ValidationErrorMessageData } from "@/modules/common/ValidationErrorMessageData";
 import { IdentityAccessPostRequest } from "../common/identityAccess/IdentityAccessPostRequest";
+import { IdentityAccessApiVersion } from "../common/identityAccess/IdentityAccessApiVersion";
+import { UserRegisterValidationErrorMessage } from "@/modules/userRegister/UserRegisterValidationErrorMessage";
 
 export class UserRegisterService implements IUserRegisterService
 {
@@ -16,12 +16,16 @@ export class UserRegisterService implements IUserRegisterService
 
     public async register(userRegisterData: UserRegisterData): Promise<UserRegisterResult>
     {
-        const response = await this.identityAccessPostRequest().send(
+        const response = await this.identityAccessPostRequest().send<
+            UserRegisterRequestData,
+            [],
+            UserRegisterValidationErrorMessage
+        > (
             userRegisterData.toRequestData(),
-            UserRegisterApiResponse
+            IdentityAccessApiVersion.V1
         );
 
-        if (response.status === 200) {
+        if (response.success) {
             return {
                 isSuccess: true,
                 validationErrorMessage: {
@@ -35,9 +39,9 @@ export class UserRegisterService implements IUserRegisterService
         return {
             isSuccess: false,
             validationErrorMessage: {
-                email: [],
-                password: [],
-                passwordConfirmation: []
+                email: response.error?.details.email ?? [],
+                password: response.error?.details.password ?? [],
+                passwordConfirmation: response.error?.details.passwordConfirmation ?? []
             }
         };
     }

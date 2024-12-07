@@ -2,7 +2,7 @@ import { UserEmail } from "./UserEmail";
 import { UserPassword, UserPasswordConfirmation } from "./UserPassword";
 import { UserRegisterValidationErrorMessage } from "./UserRegisterValidationErrorMessage";
 
-type UserRegisterRequestData = {
+export type UserRegisterRequestData = {
     email: string;
     password: string;
     passwordConfirmation: string;

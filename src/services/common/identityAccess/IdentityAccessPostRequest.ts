@@ -23,11 +23,14 @@ export class IdentityAccessPostRequest
     {
         await this.fetchCerfToken().handle();
 
+        const csrfToken = this.getCookie('XSRF-TOKEN');
+
         const response = await fetch(this.requestUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": `application/vnd.example.${identityAccessApiVersion}+json`
+                "Accept": `application/vnd.example.${identityAccessApiVersion}+json, application/json`,
+                "X-XSRF-TOKEN": csrfToken ?? ''
             },
             credentials: 'include',
             body: JSON.stringify(requestData)
@@ -45,5 +48,12 @@ export class IdentityAccessPostRequest
     private fetchCerfToken(): FetchCerfToken
     {
         return new FetchCerfToken();
+    }
+
+    private getCookie(name: string): string | null {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+        return null;
     }
 }

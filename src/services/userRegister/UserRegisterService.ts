@@ -16,7 +16,7 @@ export class UserRegisterService implements IUserRegisterService
 
     public async register(userRegisterData: UserRegisterData): Promise<UserRegisterResult>
     {
-        const apiResponse = await this.identityAccessPostRequest().send(
+        const response = await this.identityAccessPostRequest().send(
             userRegisterData.toRequestData(),
             UserRegisterApiResponse
         );

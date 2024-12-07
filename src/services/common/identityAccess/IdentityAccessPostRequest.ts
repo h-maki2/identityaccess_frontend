@@ -1,3 +1,4 @@
+import { IdentityAccessApiResponse } from "./IdentityAccessApiResponse";
 import { IdentityAccessApiVersion } from "./IdentityAccessApiVersion";
 
 export class IdentityAccessPostRequest
@@ -10,10 +11,14 @@ export class IdentityAccessPostRequest
         this.requestUrl = `${this.BASE_URL}${requestUrlPath}`;
     }
 
-    public async send<TRequestData>(
+    public async send<
+        TRequestData, 
+        TResponseData, 
+        TErrorDetails
+    >(
         requestData: TRequestData,
         identityAccessApiVersion: IdentityAccessApiVersion
-    ): Promise<Response>
+    ): Promise<IdentityAccessApiResponse<TResponseData, TErrorDetails>>
     {
         const response = await fetch(this.requestUrl, {
             method: "POST",
@@ -28,6 +33,8 @@ export class IdentityAccessPostRequest
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return response;
+        const responseJson: IdentityAccessApiResponse<TResponseData, TErrorDetails> = await response.json();
+
+        return responseJson;
     }
 }

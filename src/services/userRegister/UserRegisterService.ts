@@ -21,22 +21,29 @@ export class UserRegisterService implements IUserRegisterService
             UserRegisterApiResponse
         );
 
-        return new UserRegisterResult(apiResponse.isSuccess, this.toValidationErrorMessageDataList(apiResponse.data));
+        if (response.status === 200) {
+            return {
+                isSuccess: true,
+                validationErrorMessage: {
+                    email: [],
+                    password: [],
+                    passwordConfirmation: []
+                }
+            };
+        }
+
+        return {
+            isSuccess: false,
+            validationErrorMessage: {
+                email: [],
+                password: [],
+                passwordConfirmation: []
+            }
+        };
     }
 
     private identityAccessPostRequest(): IdentityAccessPostRequest
     {
         return new IdentityAccessPostRequest(this.requestUrlPath);
-    }
-
-    private toValidationErrorMessageDataList(reponseData: UserRegisterApiResponseValue): ValidationErrorMessageData[]
-    {
-        let result: ValidationErrorMessageData[] = [];
-
-        Object.entries(reponseData.validationErrorMessageList).forEach(([errorField, errorMessageList]: [string, string[]]) => {
-            result.push(new ValidationErrorMessageData(errorField, errorMessageList));
-        });
-
-        return result;
     }
 }

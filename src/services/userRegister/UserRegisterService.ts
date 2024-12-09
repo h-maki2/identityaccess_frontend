@@ -25,6 +25,8 @@ export class UserRegisterService implements IUserRegisterService
             IdentityAccessApiVersion.V1
         );
 
+        console.log(response);
+
         if (response.success) {
             return {
                 isSuccess: true,

@@ -1,7 +1,7 @@
 /**
  * CSRFトークンを取得してCookieに保存する
  */
-export class FetchCerfToken
+export class FetchCsrfToken
 {
     readonly REQUEST_URL = 'http://api.identityaccess.local/sanctum/csrf-cookie';
 

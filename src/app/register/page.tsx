@@ -3,12 +3,13 @@
 import { Backdrop, Button, CircularProgress, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, TextField } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UserEmail } from "@/modules/userRegister/UserEmail";
 import { UserPassword, UserPasswordConfirmation } from "@/modules/userRegister/UserPassword";
 import { useUserRegister } from "@/hooks/userRegister/UseUserRegister";
 import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
 import { UserRegisterService } from "@/services/userRegister/UserRegisterService";
+import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
 
 
 export default function registerUserPage()
@@ -29,13 +30,10 @@ export default function registerUserPage()
     event.preventDefault();
   };
 
-  const { userRegister, userRegisterResult, error, loading } = useUserRegister({
-    userRegisterService: new UserRegisterService(),
-    userRegisterData: new UserRegisterData(email, password, passwordConfirmation)
-  });
+  const { userRegister, userRegisterResult, error, loading } = useUserRegister();
 
   const handleRequest = () => {
-    userRegister();
+    userRegister(new UserRegisterData(email, password, passwordConfirmation), new UserRegisterService());
   }
 
   return (

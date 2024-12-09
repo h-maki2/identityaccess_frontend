@@ -3,25 +3,30 @@ import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
 import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
 import { useEffect, useState } from "react";
 
-interface UseUserRegisterProps {
-    userRegisterService: IUserRegisterService;
-    userRegisterData: UserRegisterData;
-}
+// interface UseUserRegisterProps {
+//     userRegisterService: IUserRegisterService;
+// }
 
 interface UseUserRegisterReturn {
-    userRegister: () => Promise<void>;
+    userRegister: (userRegisterData: UserRegisterData, userRegisterService: IUserRegisterService) => Promise<void>;
     userRegisterResult: UserRegisterResult | null;
     error: boolean;
     loading: boolean;
 }
 
-export const useUserRegister = ({userRegisterService, userRegisterData}: UseUserRegisterProps): UseUserRegisterReturn => {
+export const useUserRegister = (): UseUserRegisterReturn => {
     const [userRegisterResult, setUserRegisterResult] = useState<UserRegisterResult | null>(null);
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
 
-    const userRegister = async () => {
+    const userRegister = async (
+        userRegisterData: UserRegisterData,
+        userRegisterService: IUserRegisterService
+    ) => {
         setLoading(true);
+        setUserRegisterResult(null);
+        setError(false);
+
         if (!userRegisterData.isValid()) {
             setUserRegisterResult({
                 isSuccess: false,
@@ -39,6 +44,8 @@ export const useUserRegister = ({userRegisterService, userRegisterData}: UseUser
         } finally {
             setLoading(false);
         }
+
+        console.log(userRegisterResult);
     };
     
     return { userRegister, userRegisterResult, error, loading };

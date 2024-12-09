@@ -1,11 +1,11 @@
-import { FetchCerfToken } from "../csrfToken/FetchCerfToken";
+import { FetchCsrfToken } from "../csrfToken/FetchCsrfToken";
 import { IdentityAccessApiResponse } from "./IdentityAccessApiResponse";
 import { IdentityAccessApiVersion } from "./IdentityAccessApiVersion";
 
 export class IdentityAccessPostRequest
 {
     protected requestUrl: string;
-    protected readonly BASE_URL = 'http://api.identityaccess.local';
+    protected readonly BASE_URL = 'http://api.identityaccess.local/api/';
 
     constructor(requestUrlPath: string)
     {
@@ -21,22 +21,21 @@ export class IdentityAccessPostRequest
         identityAccessApiVersion: IdentityAccessApiVersion
     ): Promise<IdentityAccessApiResponse<TResponseData, TErrorDetails>>
     {
-        await this.fetchCerfToken().handle();
-
-        const csrfToken = this.getCookie('XSRF-TOKEN');
+        // await this.fetchCsrfToken().handle();
+        // const csrfToken = this.getCookie('XSRF-TOKEN');
 
         const response = await fetch(this.requestUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": `application/vnd.example.${identityAccessApiVersion}+json, application/json`,
-                "X-XSRF-TOKEN": csrfToken ?? ''
+                // "X-XSRF-TOKEN": csrfToken ?? ''
             },
-            credentials: 'include',
+            // credentials: 'include',
             body: JSON.stringify(requestData)
         });
 
-        if (!response.ok) {
+        if (response.status >= 500) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -45,15 +44,15 @@ export class IdentityAccessPostRequest
         return responseJson;
     }
 
-    private fetchCerfToken(): FetchCerfToken
-    {
-        return new FetchCerfToken();
-    }
+    // private fetchCsrfToken(): FetchCsrfToken
+    // {
+    //     return new FetchCsrfToken();
+    // }
 
-    private getCookie(name: string): string | null {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
-        return null;
-    }
+    // private getCookie(name: string): string | null {
+    //     const value = `; ${document.cookie}`;
+    //     const parts = value.split(`; ${name}=`);
+    //     if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+    //     return null;
+    // }
 }

@@ -5,7 +5,7 @@ import { IdentityAccessApiVersion } from "./IdentityAccessApiVersion";
 export class IdentityAccessPostRequest
 {
     protected requestUrl: string;
-    protected readonly BASE_URL = 'http://identityAccess.local/';
+    protected readonly BASE_URL = 'http://api.identityaccess.local';
 
     constructor(requestUrlPath: string)
     {

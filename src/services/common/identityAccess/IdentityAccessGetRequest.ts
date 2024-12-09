@@ -1,7 +1,7 @@
 export class IdentityAccessGetRequest
 {
     protected requestUrl: string;
-    protected readonly BASE_URL = 'https://identityaccessapi.com/';
+    protected readonly BASE_URL = 'https://api.identityaccess.com/';
 
     constructor(requestUrlPath: string)
     {

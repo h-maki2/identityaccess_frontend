@@ -35,7 +35,7 @@ export default function registerUserPage()
   const { userRegister, error, loading } = useUserRegister();
 
   const handleRequest = () => {
-    userRegister(new UserRegisterData(email, password, passwordConfirmation), new UserRegisterService(), setUserRegisterResult);
+    userRegister(new UserRegisterData(email, password, passwordConfirmation, userRegisterResult?.validationErrorMessage), new UserRegisterService(), setUserRegisterResult);
     console.log(userRegisterResult);
   }
 

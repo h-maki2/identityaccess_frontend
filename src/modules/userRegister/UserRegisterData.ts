@@ -15,16 +15,21 @@ export class UserRegisterData
     readonly passwordConfirmation: UserPasswordConfirmation;
     private validationErrorMessage: UserRegisterValidationErrorMessage;
 
-    constructor(email: UserEmail, password: UserPassword, passwordConfirmation: UserPasswordConfirmation)
+    constructor(
+        email: UserEmail, 
+        password: UserPassword, 
+        passwordConfirmation: UserPasswordConfirmation,
+        validationErrorMessage: UserRegisterValidationErrorMessage|null = null
+    )
     {
         this.email = email;
         this.password = password;
         this.passwordConfirmation = passwordConfirmation;
-        this.validationErrorMessage = {
+        this.validationErrorMessage = validationErrorMessage ?? {
             email: [],
             password: [],
             passwordConfirmation: []
-        }
+        };
     }
 
     public isValid(): boolean
@@ -36,7 +41,7 @@ export class UserRegisterData
         }
 
         if (this.passwordConfirmation.hasValidationError()) {
-            this.validationErrorMessage.password = [this.passwordConfirmation.validationErrorMessage];
+            this.validationErrorMessage.passwordConfirmation = [this.passwordConfirmation.validationErrorMessage];
             isValid = false;
         }
 

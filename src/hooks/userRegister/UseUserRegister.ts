@@ -8,20 +8,19 @@ import { useEffect, useState } from "react";
 // }
 
 interface UseUserRegisterReturn {
-    userRegister: (userRegisterData: UserRegisterData, userRegisterService: IUserRegisterService) => Promise<void>;
-    userRegisterResult: UserRegisterResult | null;
+    userRegister: (userRegisterData: UserRegisterData, userRegisterService: IUserRegisterService, setUserRegisterResult: React.Dispatch<React.SetStateAction<UserRegisterResult | null>>) => Promise<void>;
     error: boolean;
     loading: boolean;
 }
 
 export const useUserRegister = (): UseUserRegisterReturn => {
-    const [userRegisterResult, setUserRegisterResult] = useState<UserRegisterResult | null>(null);
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
 
     const userRegister = async (
         userRegisterData: UserRegisterData,
-        userRegisterService: IUserRegisterService
+        userRegisterService: IUserRegisterService,
+        setUserRegisterResult: React.Dispatch<React.SetStateAction<UserRegisterResult | null>>
     ) => {
         setLoading(true);
         setUserRegisterResult(null);
@@ -44,9 +43,7 @@ export const useUserRegister = (): UseUserRegisterReturn => {
         } finally {
             setLoading(false);
         }
-
-        console.log(userRegisterResult);
     };
     
-    return { userRegister, userRegisterResult, error, loading };
+    return { userRegister, error, loading };
 }

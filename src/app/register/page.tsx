@@ -30,10 +30,13 @@ export default function registerUserPage()
     event.preventDefault();
   };
 
-  const { userRegister, userRegisterResult, error, loading } = useUserRegister();
+  const [userRegisterResult, setUserRegisterResult] = useState<UserRegisterResult | null>(null);
+
+  const { userRegister, error, loading } = useUserRegister();
 
   const handleRequest = () => {
-    userRegister(new UserRegisterData(email, password, passwordConfirmation), new UserRegisterService());
+    userRegister(new UserRegisterData(email, password, passwordConfirmation), new UserRegisterService(), setUserRegisterResult);
+    console.log(userRegisterResult);
   }
 
   return (
@@ -78,6 +81,9 @@ export default function registerUserPage()
               }
               label="Password"
             />
+            {userRegisterResult && userRegisterResult.validationErrorMessage.password.map(
+              (errorMessage, index) => <FormHelperText key={index} error>{errorMessage}</FormHelperText>
+            )}
         </FormControl>
         <FormControl sx={{ m: 1, width: '50ch' }} variant="outlined">
           <InputLabel htmlFor="passwordConfirmation">パスワード確認用</InputLabel>
@@ -102,6 +108,9 @@ export default function registerUserPage()
               }
               label="Password"
             />
+          {userRegisterResult && userRegisterResult.validationErrorMessage.passwordConfirmation.map(
+            (errorMessage, index) => <FormHelperText key={index} error>{errorMessage}</FormHelperText>
+          )}
         </FormControl>
         <Button 
           variant="contained"

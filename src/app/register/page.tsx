@@ -4,19 +4,16 @@ import { Backdrop, Button, CircularProgress, FormControl, FormHelperText, IconBu
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import React, { useEffect, useState } from "react";
-import { UserEmail } from "@/modules/userRegister/UserEmail";
-import { UserPassword, UserPasswordConfirmation } from "@/modules/userRegister/UserPassword";
 import { useUserRegister } from "@/hooks/userRegister/UseUserRegister";
-import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
 import { UserRegisterService } from "@/services/userRegister/UserRegisterService";
 import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
 
 
 export default function registerUserPage()
 {
-  const [email, setEmail] = useState<UserEmail>(new UserEmail(''));
-  const [password, setPassword] = useState<UserPassword>({ value: '' });
-  const [passwordConfirmation, setPasswordConfirmation] = useState<UserPasswordConfirmation>(new UserPasswordConfirmation('', password));
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,7 +32,7 @@ export default function registerUserPage()
   const { userRegister, error, loading } = useUserRegister();
 
   const handleRequest = () => {
-    userRegister(new UserRegisterData(email, password, passwordConfirmation, userRegisterResult?.validationErrorMessage), new UserRegisterService(), setUserRegisterResult);
+    userRegister({email, password, passwordConfirmation}, new UserRegisterService(), setUserRegisterResult);
     console.log(userRegisterResult);
   }
 
@@ -53,7 +50,7 @@ export default function registerUserPage()
           id="email"
           label="メールアドレス"
           sx={{ m: 1, width: '50ch' }}
-          onChange={(e) => setEmail(new UserEmail(e.target.value))}
+          onChange={(e) => setEmail(e.target.value)}
         />
         {userRegisterResult && userRegisterResult.validationErrorMessage.email.map(
           (errorMessage, index) => <FormHelperText key={index} error>{errorMessage}</FormHelperText>
@@ -63,7 +60,7 @@ export default function registerUserPage()
             <OutlinedInput
               id="password"
               type={showPassword ? 'text' : 'password'}
-              onChange={(e) => setPassword({ value: e.target.value })}
+              onChange={(e) => setPassword(e.target.value)}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -90,7 +87,7 @@ export default function registerUserPage()
             <OutlinedInput
               id="passwordConfirmation"
               type={showPassword ? 'text' : 'password'}
-              onChange={(e) => setPasswordConfirmation(new UserPasswordConfirmation(e.target.value, password))}
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

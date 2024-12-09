@@ -1,5 +1,5 @@
 import { IUserRegisterService } from "@/modules/userRegister/IUserRegisterService"
-import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
+import { UserRegisterRequestData } from "@/modules/userRegister/UserRegisterRequestData";
 import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
 import { useEffect, useState } from "react";
 
@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 // }
 
 interface UseUserRegisterReturn {
-    userRegister: (userRegisterData: UserRegisterData, userRegisterService: IUserRegisterService, setUserRegisterResult: React.Dispatch<React.SetStateAction<UserRegisterResult | null>>) => Promise<void>;
+    userRegister: (userRegisterRequestData: UserRegisterRequestData, userRegisterService: IUserRegisterService, setUserRegisterResult: React.Dispatch<React.SetStateAction<UserRegisterResult | null>>) => Promise<void>;
     error: boolean;
     loading: boolean;
 }
@@ -18,25 +18,14 @@ export const useUserRegister = (): UseUserRegisterReturn => {
     const [loading, setLoading] = useState(false);
 
     const userRegister = async (
-        userRegisterData: UserRegisterData,
+        userRegisterRequestData: UserRegisterRequestData,
         userRegisterService: IUserRegisterService,
         setUserRegisterResult: React.Dispatch<React.SetStateAction<UserRegisterResult | null>>
     ) => {
         setLoading(true);
-        setUserRegisterResult(null);
-        setError(false);
-
-        if (!userRegisterData.isValid()) {
-            setUserRegisterResult({
-                isSuccess: false,
-                validationErrorMessage: userRegisterData.getValidationErrorMessage()
-            })
-            setLoading(false);
-            return;
-        }
 
         try {
-            const result = await userRegisterService.register(userRegisterData);
+            const result = await userRegisterService.register(userRegisterRequestData);
             setUserRegisterResult(result);
         } catch (err) {
             setError(true);

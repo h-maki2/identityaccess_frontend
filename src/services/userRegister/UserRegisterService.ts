@@ -5,6 +5,12 @@ import { IdentityAccessApiVersion } from "../common/identityAccess/IdentityAcces
 import { UserRegisterValidationErrorMessage } from "@/modules/userRegister/UserRegisterValidationErrorMessage";
 import { UserRegisterRequestData } from "@/modules/userRegister/UserRegisterRequestData";
 
+export type UserRegisterErrorDetails = {
+    email: string[];
+    password: string[];
+    passwordConfirmation: string[];
+}
+
 export class UserRegisterService implements IUserRegisterService
 {
     private requestUrlPath: string;
@@ -19,22 +25,15 @@ export class UserRegisterService implements IUserRegisterService
         const response = await this.identityAccessPostRequest().send<
             UserRegisterRequestData,
             [],
-            UserRegisterValidationErrorMessage
+            UserRegisterErrorDetails
         > (
             userRegisterRequestData,
             IdentityAccessApiVersion.V1
         );
 
-        console.log(response);
-
         if (response.success) {
             return {
                 isSuccess: true,
-                validationErrorMessage: {
-                    email: [],
-                    password: [],
-                    passwordConfirmation: []
-                }
             };
         }
 

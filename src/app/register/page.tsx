@@ -7,13 +7,16 @@ import React, { useEffect, useState } from "react";
 import { useUserRegister } from "@/hooks/userRegister/UseUserRegister";
 import { UserRegisterService } from "@/services/userRegister/UserRegisterService";
 import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
+import { UserEmail } from "@/modules/userRegister/UserEmail";
+import { UserPassword } from "@/modules/userRegister/UserPassword";
+import { UserPasswordConfirmation } from "@/modules/userRegister/UserPasswordConfirmation";
 
 
 export default function registerUserPage()
 {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
+  const [email, setEmail] = useState<UserEmail>(new UserEmail(''));
+  const [password, setPassword] = useState<UserPassword>({value: ''});
+  const [passwordConfirmation, setPasswordConfirmation] = useState<UserPasswordConfirmation>(new UserPasswordConfirmation('', password));
 
   const [showPassword, setShowPassword] = useState(false);
 

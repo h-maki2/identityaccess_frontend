@@ -16,6 +16,9 @@ interface UseUserRegisterReturn {
     userRegisterValidationErrorMessage: UserRegisterValidationErrorMessage | null;
 }
 
+/**
+ * ユーザー登録を行うカスタムフック
+ */
 export const useUserRegister = ({userRegisterService}: UseUserRegisterProps): UseUserRegisterReturn => {
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
@@ -28,7 +31,7 @@ export const useUserRegister = ({userRegisterService}: UseUserRegisterProps): Us
         setUserRegisterValidationErrorMessage(null);
         
         try {
-            const result = await userRegisterService.register(userRegisterData);
+            const result: UserRegisterResult = await userRegisterService.register(userRegisterData);
             setUserRegisterValidationErrorMessage(result.validationErrorMessage);
             setUserRegisterSuccess(result.isSuccess);
         } catch (err) {

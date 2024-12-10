@@ -3,10 +3,9 @@
 import { Backdrop, Button, CircularProgress, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, TextField } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useUserRegister } from "@/hooks/userRegister/UseUserRegister";
 import { UserRegisterService } from "@/services/userRegister/UserRegisterService";
-import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
 import { UserEmail } from "@/modules/userRegister/UserEmail";
 import { UserPassword } from "@/modules/userRegister/UserPassword";
 import { UserPasswordConfirmation } from "@/modules/userRegister/UserPasswordConfirmation";

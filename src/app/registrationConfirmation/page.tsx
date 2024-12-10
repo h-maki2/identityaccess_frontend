@@ -19,10 +19,10 @@ export default function registrationConfirmationPage()
             まだ本登録は完了していません。
           </Typography>
           <Typography variant="h6" gutterBottom>
-            先ほど入力したメールアドレス宛に本登録確認メールを送信しました。
+            先ほど入力したメールアドレス宛に認証済み更新メールを送信しました。
           </Typography>
           <Typography variant="h6" gutterBottom>
-            そちらのメールから本登録を完了してください。
+            そちらのメールから認証済みに更新を行い、本登録を完了してください。
           </Typography>
         </Stack>
       </div>

@@ -3,6 +3,9 @@ import { IdentityAccessApiResponse } from "@/services/common/identityAccess/Iden
 import { UserEmail } from "./UserEmail";
 import { UserPasswordConfirmation } from "./UserPasswordConfirmation";
 
+/**
+ * ユーザー登録バリデーションエラーメッセージ
+ */
 export class UserRegisterValidationErrorMessage
 {
     private email: string[];
@@ -38,6 +41,9 @@ export class UserRegisterValidationErrorMessage
         );
     }
 
+    /**
+     * ユーザー登録APIのレスポンスからエラーメッセージを生成する
+     */
     public static createFromApiResponse(
         apiResponse: IdentityAccessApiResponse<[], UserRegisterErrorDetails>
     ): UserRegisterValidationErrorMessage

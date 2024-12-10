@@ -3,12 +3,18 @@ import { UserPassword } from "./UserPassword";
 import { UserPasswordConfirmation } from "./UserPasswordConfirmation";
 import { UserRegisterValidationErrorMessage } from "./UserRegisterValidationErrorMessage";
 
+/**
+ * ユーザー登録リクエストデータ
+ */
 export type UserRegisterRequestData = {
     email: string;
     password: string;
     passwordConfirmation: string;
 }
 
+/**
+ * ユーザー登録情報
+ */
 export class UserRegisterData
 {
     readonly email: UserEmail;

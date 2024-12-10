@@ -4,6 +4,7 @@ import { IdentityAccessPostRequest } from "../common/identityAccess/IdentityAcce
 import { IdentityAccessApiVersion } from "../common/identityAccess/IdentityAccessApiVersion";
 import { UserRegisterValidationErrorMessage } from "@/modules/userRegister/UserRegisterValidationErrorMessage";
 import { UserRegisterRequestData } from "@/modules/userRegister/UserRegisterRequestData";
+import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
 
 export type UserRegisterErrorDetails = {
     email: string[];
@@ -20,30 +21,20 @@ export class UserRegisterService implements IUserRegisterService
         this.requestUrlPath = 'userRegistration';
     }
 
-    public async register(userRegisterRequestData: UserRegisterRequestData): Promise<UserRegisterResult>
+    public async register(userRegisterData: UserRegisterData): Promise<UserRegisterResult>
     {
         const response = await this.identityAccessPostRequest().send<
             UserRegisterRequestData,
             [],
             UserRegisterErrorDetails
         > (
-            userRegisterRequestData,
+            userRegisterData.toRequestData(),
             IdentityAccessApiVersion.V1
         );
 
-        if (response.success) {
-            return {
-                isSuccess: true,
-            };
-        }
-
         return {
-            isSuccess: false,
-            validationErrorMessage: {
-                email: response.error?.details.email ?? [],
-                password: response.error?.details.password ?? [],
-                passwordConfirmation: response.error?.details.passwordConfirmation ?? []
-            }
+            isSuccess: response.success ? true : false,
+            validationErrorMessage: UserRegisterValidationErrorMessage.createFromApiResponse(response)
         };
     }
 

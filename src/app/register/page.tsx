@@ -10,6 +10,8 @@ import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
 import { UserEmail } from "@/modules/userRegister/UserEmail";
 import { UserPassword } from "@/modules/userRegister/UserPassword";
 import { UserPasswordConfirmation } from "@/modules/userRegister/UserPasswordConfirmation";
+import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
+import { useRouter } from "next/router";
 
 
 export default function registerUserPage()
@@ -30,13 +32,15 @@ export default function registerUserPage()
     event.preventDefault();
   };
 
-  const [userRegisterResult, setUserRegisterResult] = useState<UserRegisterResult | null>(null);
-
-  const { userRegister, error, loading } = useUserRegister();
+  const { userRegister, error, loading, userRegisterResult} = useUserRegister({userRegisterService: new UserRegisterService()});
 
   const handleRequest = () => {
-    userRegister({email, password, passwordConfirmation}, new UserRegisterService(), setUserRegisterResult);
-    console.log(userRegisterResult);
+    const userRegisterData = new UserRegisterData(email, password, passwordConfirmation);
+    userRegister(userRegisterData);
+
+    if (userRegisterResult?.isSuccess) {
+      useRouter().push('/registrationConfirmation');
+    }
   }
 
   return (
@@ -53,7 +57,7 @@ export default function registerUserPage()
           id="email"
           label="メールアドレス"
           sx={{ m: 1, width: '50ch' }}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(new UserEmail(e.target.value))}
         />
         {userRegisterResult && userRegisterResult.validationErrorMessage.email.map(
           (errorMessage, index) => <FormHelperText key={index} error>{errorMessage}</FormHelperText>
@@ -63,7 +67,7 @@ export default function registerUserPage()
             <OutlinedInput
               id="password"
               type={showPassword ? 'text' : 'password'}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword({value: e.target.value})}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -90,7 +94,7 @@ export default function registerUserPage()
             <OutlinedInput
               id="passwordConfirmation"
               type={showPassword ? 'text' : 'password'}
-              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              onChange={(e) => setPasswordConfirmation(new UserPasswordConfirmation(e.target.value, password))}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

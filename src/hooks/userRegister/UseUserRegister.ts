@@ -2,38 +2,43 @@ import { IUserRegisterService } from "@/modules/userRegister/IUserRegisterServic
 import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
 import { UserRegisterRequestData } from "@/modules/userRegister/UserRegisterRequestData";
 import { UserRegisterResult } from "@/modules/userRegister/UserRegisterResult";
-import { useEffect, useState } from "react";
+import { UserRegisterValidationErrorMessage } from "@/modules/userRegister/UserRegisterValidationErrorMessage";
+import { useState } from "react";
 
 interface UseUserRegisterProps {
     userRegisterService: IUserRegisterService;
 }
 
 interface UseUserRegisterReturn {
-    userRegister: (userRegisterData: UserRegisterData) => Promise<void>;
+    userRegister: (userRegisterData: UserRegisterData) => Promise<Boolean>;
     error: boolean;
     loading: boolean;
-    userRegisterResult: UserRegisterResult | null;
+    userRegisterValidationErrorMessage: UserRegisterValidationErrorMessage | null;
 }
 
 export const useUserRegister = ({userRegisterService}: UseUserRegisterProps): UseUserRegisterReturn => {
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
-    const [userRegisterResult, setUserRegisterResult] = useState<UserRegisterResult | null>(null);
+    const [userRegisterValidationErrorMessage, setUserRegisterValidationErrorMessage] = useState<UserRegisterValidationErrorMessage | null>(null);
+    const [userRegisterSuccess, setUserRegisterSuccess] = useState<boolean>(false);
 
-    const userRegister = async (userRegisterData: UserRegisterData) => {
+    const userRegister = async (userRegisterData: UserRegisterData): Promise<Boolean> => {
         setLoading(true);
         setError(false);
-        setUserRegisterResult(null);
+        setUserRegisterValidationErrorMessage(null);
         
         try {
             const result = await userRegisterService.register(userRegisterData);
-            setUserRegisterResult(result);
+            setUserRegisterValidationErrorMessage(result.validationErrorMessage);
+            setUserRegisterSuccess(result.isSuccess);
         } catch (err) {
             setError(true);
         } finally {
             setLoading(false);
         }
+
+        return userRegisterSuccess;
     };
     
-    return { userRegister, error, loading, userRegisterResult};
+    return { userRegister, error, loading, userRegisterValidationErrorMessage};
 }

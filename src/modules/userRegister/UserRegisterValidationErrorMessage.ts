@@ -61,17 +61,17 @@ export class UserRegisterValidationErrorMessage
         return this.email.length > 0 || this.password.length > 0 || this.passwordConfirmation.length > 0;
     }
 
-    get getEmail(): string[]
+    get getEmailError(): string[]
     {
         return this.email;
     }
 
-    get getPassword(): string[]
+    get getPasswordError(): string[]
     {
         return this.password;
     }
 
-    get getPasswordConfirmation(): string[]
+    get getPasswordConfirmationError(): string[]
     {
         return this.passwordConfirmation;
     }

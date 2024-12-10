@@ -11,7 +11,7 @@ import { UserEmail } from "@/modules/userRegister/UserEmail";
 import { UserPassword } from "@/modules/userRegister/UserPassword";
 import { UserPasswordConfirmation } from "@/modules/userRegister/UserPasswordConfirmation";
 import { UserRegisterData } from "@/modules/userRegister/UserRegisterData";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 
 export default function registerUserPage()
@@ -32,14 +32,16 @@ export default function registerUserPage()
     event.preventDefault();
   };
 
-  const { userRegister, error, loading, userRegisterResult} = useUserRegister({userRegisterService: new UserRegisterService()});
+  const router = useRouter();
 
-  const handleRequest = () => {
+  const { userRegister, error, loading, userRegisterValidationErrorMessage} = useUserRegister({userRegisterService: new UserRegisterService()});
+
+  const handleRequest = async () => {
     const userRegisterData = new UserRegisterData(email, password, passwordConfirmation);
-    userRegister(userRegisterData);
+    const userRegisterSuccess = await userRegister(userRegisterData);
 
-    if (userRegisterResult?.isSuccess) {
-      useRouter().push('/registrationConfirmation');
+    if (userRegisterSuccess) {
+      router.push('/registrationConfirmation');
     }
   }
 
@@ -59,7 +61,7 @@ export default function registerUserPage()
           sx={{ m: 1, width: '50ch' }}
           onChange={(e) => setEmail(new UserEmail(e.target.value))}
         />
-        {userRegisterResult && userRegisterResult.validationErrorMessage.email.map(
+        {userRegisterValidationErrorMessage && userRegisterValidationErrorMessage.getEmailError.map(
           (errorMessage, index) => <FormHelperText key={index} error>{errorMessage}</FormHelperText>
         )}
         <FormControl sx={{ m: 1, width: '50ch' }} variant="outlined">
@@ -85,7 +87,7 @@ export default function registerUserPage()
               }
               label="Password"
             />
-            {userRegisterResult && userRegisterResult.validationErrorMessage.password.map(
+            {userRegisterValidationErrorMessage && userRegisterValidationErrorMessage.getPasswordError.map(
               (errorMessage, index) => <FormHelperText key={index} error>{errorMessage}</FormHelperText>
             )}
         </FormControl>
@@ -112,7 +114,7 @@ export default function registerUserPage()
               }
               label="Password"
             />
-          {userRegisterResult && userRegisterResult.validationErrorMessage.passwordConfirmation.map(
+          {userRegisterValidationErrorMessage && userRegisterValidationErrorMessage.getPasswordConfirmationError.map(
             (errorMessage, index) => <FormHelperText key={index} error>{errorMessage}</FormHelperText>
           )}
         </FormControl>

@@ -28,7 +28,7 @@ export class IdentityAccessPostRequest
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": `application/vnd.example.${identityAccessApiVersion}+json, application/json`,
+                "Accept": `application/vnd.example.${identityAccessApiVersion}+json`,
                 // "X-XSRF-TOKEN": csrfToken ?? ''
             },
             // credentials: 'include',

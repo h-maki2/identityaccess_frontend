@@ -37,7 +37,7 @@ export default function verifiedUpdatePage()
       <div style={{ display: 'flex', justifyContent: 'center'}}>
         <Stack
           component="form"
-          sx={{ width: '25ch', mt: 13, justifyContent: 'center'}}
+          sx={{ width: '100ch', mt: 13, justifyContent: 'center'}}
           spacing={2}
           noValidate
           autoComplete="off"
@@ -45,7 +45,7 @@ export default function verifiedUpdatePage()
         >
           <TextField
             id="oneTimePassword"
-            label="Number"
+            label="ワンタイムパスワード"
             type="number"
             variant="standard"
             onChange={(e) => setOneTimePassword(e.target.value)}

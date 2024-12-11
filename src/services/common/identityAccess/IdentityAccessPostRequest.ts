@@ -14,12 +14,12 @@ export class IdentityAccessPostRequest
 
     public async send<
         TRequestData, 
-        TResponseData, 
+        TSuccessResponseData, 
         TErrorDetails
     >(
         requestData: TRequestData,
         identityAccessApiVersion: IdentityAccessApiVersion
-    ): Promise<IdentityAccessApiResponse<TResponseData, TErrorDetails>>
+    ): Promise<IdentityAccessApiResponse<TSuccessResponseData, TErrorDetails>>
     {
         // await this.fetchCsrfToken().handle();
         // const csrfToken = this.getCookie('XSRF-TOKEN');
@@ -39,7 +39,7 @@ export class IdentityAccessPostRequest
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const responseJson: IdentityAccessApiResponse<TResponseData, TErrorDetails> = await response.json();
+        const responseJson: IdentityAccessApiResponse<TSuccessResponseData, TErrorDetails> = await response.json();
 
         return responseJson;
     }

@@ -1,6 +1,6 @@
-export type IdentityAccessApiResponse<TResponseData, TErrorDetails> = {
+export type IdentityAccessApiResponse<TSuccessResponseData, TErrorDetails> = {
     readonly success: boolean;
-    readonly data?: TResponseData;
+    readonly data?: TSuccessResponseData;
     readonly error?: {
         code: string;
         details: TErrorDetails;

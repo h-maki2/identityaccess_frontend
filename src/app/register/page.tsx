@@ -3,7 +3,7 @@
 import { Backdrop, Button, CircularProgress, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, TextField } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserRegister } from "@/hooks/userRegister/UseUserRegister";
 import { UserRegisterService } from "@/services/userRegister/UserRegisterService";
 import { UserEmail } from "@/modules/userRegister/UserEmail";
@@ -33,16 +33,18 @@ export default function registerUserPage()
 
   const router = useRouter();
 
-  const { userRegister, error, loading, userRegisterValidationErrorMessage} = useUserRegister({userRegisterService: new UserRegisterService()});
+  const { userRegister, error, loading, userRegisterValidationErrorMessage, userRegisterSuccess} = useUserRegister({userRegisterService: new UserRegisterService()});
 
-  const handleRequest = async () => {
+  const handleRequest = () => {
     const userRegisterData = new UserRegisterData(email, password, passwordConfirmation);
-    const userRegisterSuccess = await userRegister(userRegisterData);
+    userRegister(userRegisterData);
+  }
 
+  useEffect(() => {
     if (userRegisterSuccess) {
       router.push('/registrationConfirmation');
     }
-  }
+  }, [userRegisterSuccess, router]);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center'}}>

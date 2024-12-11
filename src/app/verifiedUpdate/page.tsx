@@ -1,5 +1,5 @@
 import { Backdrop, Button, CircularProgress, FormHelperText, Stack, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useVerifiedUpdate } from "@/hooks/verifiedUpdate/UseVerifiedUpdate";
 import { VerifiedUpdateService } from "@/services/verifiedUpdate/VerifiedUpdateService";
@@ -14,19 +14,21 @@ export default function verifiedUpdatePage()
   const searchParams = useSearchParams();
   const oneTimeToken = searchParams.get('token');
 
-  const { verifiedUpdate, error, loading, validationErrorMessage } = useVerifiedUpdate({verifiedUpdateService: new VerifiedUpdateService()});
+  const { verifiedUpdate, error, loading, validationErrorMessage, updateSuccess } = useVerifiedUpdate({verifiedUpdateService: new VerifiedUpdateService()});
 
-  const handleRequest = async () => {
+  const handleRequest = () => {
     const verifiedUpdateData: VerifiedUpdateData = {
       oneTimePassword: oneTimePassword ?? '', 
       oneTimeToken: oneTimeToken ?? ''
     }
-    const updateSuccess = await verifiedUpdate(verifiedUpdateData);
-
-    if (updateSuccess) {
-      router.push('/verifiedUpdateComplete');
-    }
+    verifiedUpdate(verifiedUpdateData);
   }
+
+  // useEffect(() => {
+  //   if (updateSuccess) {
+  //     router.push('/verifiedUpdateComplete');
+  //   }
+  // }, [updateSuccess, router]);
 
   return (
     <>

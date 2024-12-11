@@ -10,10 +10,11 @@ interface UseUserRegisterProps {
 }
 
 interface UseUserRegisterReturn {
-    userRegister: (userRegisterData: UserRegisterData) => Promise<Boolean>;
+    userRegister: (userRegisterData: UserRegisterData) => Promise<void>;
     error: boolean;
     loading: boolean;
     userRegisterValidationErrorMessage: UserRegisterValidationErrorMessage | null;
+    userRegisterSuccess: Boolean;
 }
 
 /**
@@ -23,17 +24,18 @@ export const useUserRegister = ({userRegisterService}: UseUserRegisterProps): Us
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
     const [userRegisterValidationErrorMessage, setUserRegisterValidationErrorMessage] = useState<UserRegisterValidationErrorMessage | null>(null);
-    const [userRegisterSuccess, setUserRegisterSuccess] = useState<boolean>(false);
+    const [userRegisterSuccess, setUserRegisterSuccess] = useState<Boolean>(false);
 
-    const userRegister = async (userRegisterData: UserRegisterData): Promise<Boolean> => {
+    const userRegister = async (userRegisterData: UserRegisterData): Promise<void> => {
         setLoading(true);
         setError(false);
         setUserRegisterValidationErrorMessage(null);
         
         if (userRegisterData.isInvalid()) {
             setUserRegisterValidationErrorMessage(userRegisterData.getValidationErrorMessage());
+            setUserRegisterSuccess(false);
             setLoading(false);
-            return false;
+            return;
         }
         
         try {
@@ -45,9 +47,7 @@ export const useUserRegister = ({userRegisterService}: UseUserRegisterProps): Us
         } finally {
             setLoading(false);
         }
-
-        return userRegisterSuccess;
     };
     
-    return { userRegister, error, loading, userRegisterValidationErrorMessage};
+    return { userRegister, error, loading, userRegisterValidationErrorMessage, userRegisterSuccess };
 }

@@ -8,19 +8,20 @@ type UseVerifiedUpdateProps = {
 }
 
 type UseVerifiedUpdateReturn = {
-    verifiedUpdate: (verifiedUpdateData: VerifiedUpdateData) => Promise<Boolean>;
+    verifiedUpdate: (verifiedUpdateData: VerifiedUpdateData) => Promise<void>;
     error: boolean;
     loading: boolean;
     validationErrorMessage: string | null;
+    updateSuccess: Boolean;
 }
 
 export const useVerifiedUpdate = ({verifiedUpdateService}: UseVerifiedUpdateProps): UseVerifiedUpdateReturn => {
     const [error, setError] = useState<boolean>(false);
     const [loading, setLoading] = useState(false);
     const [validationErrorMessage, setValidationErrorMessage] = useState<string | null>(null);
-    const [success, setSuccess] = useState<boolean>(false);
+    const [updateSuccess, setUpdateSuccess] = useState<Boolean>(false);
 
-    const verifiedUpdate = async (verifiedUpdateData: VerifiedUpdateData): Promise<Boolean> => {
+    const verifiedUpdate = async (verifiedUpdateData: VerifiedUpdateData) => {
         setLoading(true);
         setError(false);
         setValidationErrorMessage(null);
@@ -28,15 +29,13 @@ export const useVerifiedUpdate = ({verifiedUpdateService}: UseVerifiedUpdateProp
         try {
             const result = await verifiedUpdateService.verifiedUpdate(verifiedUpdateData);
             setValidationErrorMessage(result.validationErrorMessage);
-            setSuccess(result.isSuccess);
+            setUpdateSuccess(result.isSuccess);
         } catch (err) {
             setError(true);
         } finally {
             setLoading(false);
         }
-
-        return success;
     }
 
-    return { verifiedUpdate, error, loading, validationErrorMessage };
+    return { verifiedUpdate, error, loading, validationErrorMessage, updateSuccess };
 }

@@ -30,6 +30,12 @@ export const useUserRegister = ({userRegisterService}: UseUserRegisterProps): Us
         setError(false);
         setUserRegisterValidationErrorMessage(null);
         
+        if (userRegisterData.isInvalid()) {
+            setUserRegisterValidationErrorMessage(userRegisterData.getValidationErrorMessage());
+            setLoading(false);
+            return false;
+        }
+        
         try {
             const result: UserRegisterResult = await userRegisterService.register(userRegisterData);
             setUserRegisterValidationErrorMessage(result.validationErrorMessage);

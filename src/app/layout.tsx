@@ -12,7 +12,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body style={{ backgroundColor: '#EEEEEE' }}>
-        <Header />
+        <Header/>
           <main>
             {children}
           </main>

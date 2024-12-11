@@ -1,3 +1,5 @@
+'use client'
+
 import { Backdrop, Button, CircularProgress, FormHelperText, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -24,11 +26,11 @@ export default function verifiedUpdatePage()
     verifiedUpdate(verifiedUpdateData);
   }
 
-  // useEffect(() => {
-  //   if (updateSuccess) {
-  //     router.push('/verifiedUpdateComplete');
-  //   }
-  // }, [updateSuccess, router]);
+  useEffect(() => {
+    if (updateSuccess) {
+      router.push('/verifiedUpdateComplete');
+    }
+  }, [updateSuccess, router]);
 
   return (
     <>

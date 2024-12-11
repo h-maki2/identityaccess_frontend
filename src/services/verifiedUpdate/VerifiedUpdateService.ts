@@ -4,7 +4,7 @@ import { VerifiedUpdateResult } from "@/modules/verifiedUpdate/VerifiedUpdateRes
 import { IdentityAccessPostRequest } from "../common/identityAccess/IdentityAccessPostRequest";
 import { IdentityAccessApiVersion } from "../common/identityAccess/IdentityAccessApiVersion";
 
-export type VerifiedUpdateErrorDetails = {
+export type VerifiedUpdateErrorDetail = {
     validationErrorMessage: string;
 }
 
@@ -22,7 +22,7 @@ export class VerifiedUpdateService implements IVerifiedUpdateService
         const response = await this.identityAccessPostRequest().send<
             VerifiedUpdateData,
             [],
-            VerifiedUpdateErrorDetails
+            VerifiedUpdateErrorDetail
         >(
             verifiedUpdateData,
             IdentityAccessApiVersion.V1

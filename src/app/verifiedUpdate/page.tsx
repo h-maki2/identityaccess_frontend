@@ -1,6 +1,9 @@
-import { Backdrop, Button, CircularProgress, Stack, TextField } from "@mui/material";
+import { Backdrop, Button, CircularProgress, FormHelperText, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useVerifiedUpdate } from "@/hooks/verifiedUpdate/UseVerifiedUpdate";
+import { VerifiedUpdateService } from "@/services/verifiedUpdate/VerifiedUpdateService";
+import { VerifiedUpdateData } from "@/modules/verifiedUpdate/VerifiedUpdateData";
 
 export default function verifiedUpdatePage()
 {
@@ -10,6 +13,20 @@ export default function verifiedUpdatePage()
 
   const searchParams = useSearchParams();
   const oneTimeToken = searchParams.get('token');
+
+  const { verifiedUpdate, error, loading, validationErrorMessage } = useVerifiedUpdate({verifiedUpdateService: new VerifiedUpdateService()});
+
+  const handleRequest = async () => {
+    const verifiedUpdateData: VerifiedUpdateData = {
+      oneTimePassword: oneTimePassword ?? '', 
+      oneTimeToken: oneTimeToken ?? ''
+    }
+    const updateSuccess = await verifiedUpdate(verifiedUpdateData);
+
+    if (updateSuccess) {
+      router.push('/verifiedUpdateComplete');
+    }
+  }
 
   return (
     <>
@@ -29,6 +46,7 @@ export default function verifiedUpdatePage()
             variant="standard"
             onChange={(e) => setOneTimePassword(e.target.value)}
           />
+          {validationErrorMessage && <FormHelperText error>{validationErrorMessage}</FormHelperText>}
           <Button
             variant="contained"
             sx={{ m: 1, width: '25ch' }}
@@ -43,7 +61,6 @@ export default function verifiedUpdatePage()
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-        <input type="hidden" name="oneTimeToken" value={oneTimeToken ?? ''}/>
       </div>
     </>
   )
